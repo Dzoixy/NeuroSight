@@ -1,32 +1,17 @@
-<!DOCTYPE html>
-<html>
-<body>
-
-<h2>Upload X-ray</h2>
-
 <input type="file" id="file">
-<button onclick="upload()">Analyze</button>
-
-<p id="result"></p>
+<button onclick="send()">Analyze</button>
+<p id="out"></p>
 
 <script>
-async function upload() {
-  let file = document.getElementById("file").files[0];
+async function send(){
+ let f = document.getElementById("file").files[0]
+ let fd = new FormData()
+ fd.append("file",f)
 
-  let formData = new FormData();
-  formData.append("file", file);
+ let res = await fetch("/predict",{method:"POST",body:fd})
+ let data = await res.json()
 
-  let res = await fetch("https://your-app.onrender.com/predict", {
-    method: "POST",
-    body: formData
-  });
-
-  let data = await res.json();
-
-  document.getElementById("result").innerText =
-    data.prediction + " (" + data.confidence + ")";
+ document.getElementById("out").innerText =
+   data.prediction + " " + data.confidence
 }
 </script>
-
-</body>
-</html>
