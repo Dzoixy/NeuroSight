@@ -5,4 +5,5 @@ router = APIRouter()
 
 @router.post("/predict")
 async def predict(file: UploadFile):
-    return await run_inference(file)
+    result = await run_inference(file)
+    return result
